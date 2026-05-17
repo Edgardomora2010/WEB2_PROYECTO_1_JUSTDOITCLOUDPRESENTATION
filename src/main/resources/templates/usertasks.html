@@ -1,54 +1,138 @@
 <!DOCTYPE html>
+
+<!-- Plantilla Thymeleaf -->
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
+
+    <!-- Titulo de pestaña navegador -->
     <title>JustDoIt! - Tareas de Usuario</title>
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <!-- Hoja de estilos CSS -->
     <link rel="stylesheet" th:href="@{/css/styles.css}" />
 </head>
+
 <body>
+
 <div class="container">
 
-    <!-- Left column -->
+    <!-- Panel izquierdo -->
     <aside class="sidebar">
+
+        <!-- Logo -->
         <div class="logo">
-            <a th:href="@{/}"><img th:src="@{/images/JustDoIt.png}" alt="JustDoIt Logo" width="200" height="200"></a>
+
+            <!-- Ruta principal -->
+            <a th:href="@{/}">
+
+                <!-- Imagen logo -->
+                <img th:src="@{/images/JustDoIt.png}"
+                     alt="JustDoIt Logo"
+                     width="200"
+                     height="200">
+
+            </a>
         </div>
 
+        <!-- Navegación lateral -->
         <nav class="navigation">
             <h3>Tareas</h3>
+
             <ul>
-                <li><a th:href="@{/user/tasks}">Tareas de usuario actual</a></li>
+
+                <!-- Ruta: /user/tasks -->
+                <li>
+                    <a th:href="@{/user/tasks}">
+                        Tareas de usuario actual
+                    </a>
+                </li>
+
+                <!--LABORATORIO 3:->-->
+                <!-- Ruta: Reporte de tareas
+                     /user/tasks/report -->
+                <li>
+                <a th:href="@{/user/tasks/report}">
+                    Reporte de tareas
+                </a>
+                </li>
+
             </ul>
         </nav>
+
     </aside>
 
-    <!-- Right column -->
+    <!-- Contenido principal -->
     <main class="content">
+
         <h1>Tareas de usuario</h1>
 
-        <!-- User info -->
+        <!-- Información usuario -->
         <div class="user-card">
-            <div class="user-avatar" th:text="${user.name != null} ? ${user.name.substring(0,1)} : 'U'">U</div>
+
+            <!-- Inicial usuario -->
+            <!-- Si user.name existe, toma primera letra -->
+            <div class="user-avatar"
+                 th:text="${user.name != null} ? ${user.name.substring(0,1)} : 'U'">
+                U
+            </div>
+
+            <!-- Datos usuario -->
             <div class="user-info">
-                <div><strong th:text="${user.name}">Nombre Usuario</strong> <span style="color:#666">(<span th:text="${user.userName}">username</span>)</span></div>
-                <div>Email: <span th:text="${user.email}">email@example.com</span></div>
-                <div>Tipo: <span th:text="${user.type}">REGULAR</span></div>
+
+                <!-- Nombre + username -->
+                <div>
+                    <strong th:text="${user.name}">
+                        Nombre Usuario
+                    </strong>
+
+                    <span style="color:#666">
+                        (
+                        <span th:text="${user.userName}">
+                            username
+                        </span>
+                        )
+                    </span>
+                </div>
+
+                <!-- Email -->
+                <div>
+                    Email:
+                    <span th:text="${user.email}">
+                        email@example.com
+                    </span>
+                </div>
+
+                <!-- Tipo usuario -->
+                <div>
+                    Tipo:
+                    <span th:text="${user.type}">
+                        REGULAR
+                    </span>
+                </div>
+
             </div>
         </div>
 
-        <!-- Tasks grouped by status -->
+        <!-- Grid visual de tareas -->
         <div class="tasks-grid">
 
-            <!-- Usamos el fragmento para cada grupo -->
+            <!-- Inserta fragmento: tareas PENDING -->
             <div th:replace="fragments/tasks-group :: tasksGroup('PENDING', ${newTask}, ${user})"></div>
+
+            <!-- Inserta fragmento: tareas INPROGRESS -->
             <div th:replace="fragments/tasks-group :: tasksGroup('INPROGRESS', ${newTask}, ${user})"></div>
+
+            <!-- Inserta fragmento: tareas DONE -->
             <div th:replace="fragments/tasks-group :: tasksGroup('DONE', ${newTask}, ${user})"></div>
 
         </div>
 
     </main>
+
 </div>
+
 </body>
 </html>

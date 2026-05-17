@@ -1,48 +1,130 @@
-<!-- Fragmento reusable para mostrar un grupo de tareas según su estado -->
+<!-- Fragmento reutilizable:
+     muestra tareas según un estado recibido -->
 <div th:fragment="tasksGroup (groupStatus, newTask, user)">
+
+    <!-- Contenedor visual grupo tareas -->
     <section class="tasks-group">
-        <!-- Título según el estado recibido -->
+
+        <!-- Título dinámico según estado -->
         <h3 th:switch="${groupStatus}">
-            <span th:case="'PENDING'">Pendientes</span>
-            <span th:case="'INPROGRESS'">En progreso</span>
-            <span th:case="'DONE'">Completadas</span>
-            <span th:case="*">Tareas</span>
+            <!-- Si estado = PENDING -->
+            <span th:case="'PENDING'">
+                Pendientes
+            </span>
+            <!-- Si estado = INPROGRESS -->
+            <span th:case="'INPROGRESS'">
+                En progreso
+            </span>
+            <!-- Si estado = DONE -->
+            <span th:case="'DONE'">
+                Completadas
+            </span>
+            <!-- Caso por defecto -->
+            <span th:case="*">
+                Tareas
+            </span>
+
         </h3>
 
-        <!-- Mensaje cuando la lista está vacía para el estado dado -->
+        <!-- Verifica si no existen tareas
+             para el estado actual -->
         <div th:if="${#lists.isEmpty(user.tasks.?[status.name() == #vars.groupStatus])}">
+
+            <!-- Mensaje dinámico -->
             <span th:switch="${groupStatus}">
-                <span th:case="'PENDING'">No hay tareas pendientes.</span>
-                <span th:case="'INPROGRESS'">No hay tareas en progreso.</span>
-                <span th:case="'DONE'">No hay tareas completadas.</span>
-                <span th:case="*">No hay tareas.</span>
+
+                <span th:case="'PENDING'">
+                    No hay tareas pendientes.
+                </span>
+
+                <span th:case="'INPROGRESS'">
+                    No hay tareas en progreso.
+                </span>
+
+                <span th:case="'DONE'">
+                    No hay tareas completadas.
+                </span>
+
+                <span th:case="*">
+                    No hay tareas.
+                </span>
+
             </span>
+
         </div>
 
-        <!-- Formulario sólo para PENDING (crea nueva tarea) -->
-        <form  method="POST" class="new-task-form" th:object="${newTask}">
-            <label for="description">Nueva tarea:</label>
-            <input id="description" th:field="*{description}" type="text" placeholder="Describe la tarea..." />
+        <!-- Formulario crear nueva tarea -->
+        <!-- th:object conecta formulario
+             con objeto newTask -->
+        <form method="POST"
+              class="new-task-form"
+              th:object="${newTask}">
+
+            <label for="description">
+                Nueva tarea:
+            </label>
+
+            <!-- Campo description
+                 conectado a Task.description -->
+            <input id="description"
+                   th:field="*{description}"
+                   type="text"
+                   placeholder="Describe la tarea..." />
+
+            <!-- Error validación description -->
             <span class="validationError"
+
                   th:if="${#fields.hasErrors('description')}"
-                  th:errors="*{description}">Desc error</span>
+                  th:errors="*{description}">Desc error
+            </span>
 
-            <!-- Estado fijo a PENDING -->
-            <input type="hidden" name="status" th:value="${groupStatus}" />
+            <!-- Campo oculto:
+                 estado automático -->
+            <input type="hidden"
+                   name="status"
+                   th:value="${groupStatus}" />
 
-            <button type="submit">Crear tarea</button>
+            <button type="submit">
+                Crear tarea
+            </button>
+
         </form>
 
-        <!-- Listado de tareas filtradas por el estado recibido -->
+        <!-- Itera tareas filtradas
+             por estado actual -->
         <div th:each="task : ${user.tasks.?[status.name() == #vars.groupStatus]}">
-            <div class="task-item" th:classappend="${groupStatus.toLowerCase()}">
-                <div class="task-desc" th:text="${task.description}">Descripción de la tarea...</div>
-                <div>
-                    <strong>Fecha límite:</strong>
-                    <span th:if="${task.deadline != null}" th:text="${#temporals.format(task.deadline, 'dd/MMMM/yyyy')}">No especificada</span>
-                    <span th:if="${task.deadline == null}">No especificada</span>
+
+            <!-- Item visual tarea -->
+            <div class="task-item"
+                 th:classappend="${groupStatus.toLowerCase()}">
+                <!-- Descripción tarea -->
+                <div class="task-desc"
+                     th:text="${task.description}">
+
+                    Descripción de la tarea...
+
                 </div>
+
+                <!-- Fecha límite -->
+                <div>
+                    <strong>
+                        Fecha límite:
+                    </strong>
+
+                    <!-- Si existe fecha -->
+                    <span th:if="${task.deadline != null}"
+                          th:text="${#temporals.format(task.deadline, 'dd/MMMM/yyyy')}">No especificada
+                    </span>
+
+                    <!-- Si no existe fecha -->
+                    <span th:if="${task.deadline == null}">
+                        No especificada
+                    </span>
+
+                </div>
+
             </div>
+
         </div>
 
     </section>

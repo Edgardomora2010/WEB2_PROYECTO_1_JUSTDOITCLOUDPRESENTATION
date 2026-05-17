@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+
+<!-- Plantilla Thymeleaf -->
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+
+    <!-- Titulo de pestaña navegador -->
+    <title>JustDoIt! - Reporte de tareas</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Hoja de estilos CSS -->
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Panel izquierdo -->
+    <aside class="sidebar">
+
+        <!-- Logo -->
+        <div class="logo">
+
+            <!-- Ruta principal -->
+            <a th:href="@{/}">
+
+                <!-- Imagen logo -->
+                <img th:src="@{/images/JustDoIt.png}"
+                     alt="JustDoIt Logo"
+                     width="200"
+                     height="200">
+            </a>
+        </div>
+
+        <!-- Navegación lateral -->
+        <nav class="navigation">
+
+            <h3>Tareas</h3>
+
+            <ul>
+                <!-- Ruta: /user/tasks -->
+                <li>
+                    <a th:href="@{/user/tasks}">
+                        Tareas de usuario actual
+                    </a>
+                </li>
+
+                <!--LABORATORIO 3:->-->
+                <!-- 2. Se debe incorporar un nuevo elemento a la navegación principal
+                utilizada en el panel izquierdo, denominado “Reporte de tareas” y ubicado
+                debajo del elemento de navegación “Tareas de usuario actual”. Dicho
+                elemento de navegación debe conducir a la ruta ““user/tasks/report”.-->
+
+                <!-- Ruta:
+                     /user/tasks/report -->
+                <li>
+                    <a th:href="@{/user/tasks/report}">
+                        Reporte de tareas
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+    </aside>
+
+    <!-- Contenido principal -->
+    <main class="content">
+
+        <!-- Título según enunciado del laboratorio -->
+        <h1>Reporte de tareas del usuario</h1>
+
+        <!-- Información usuario -->
+        <div th:replace="fragments/user-info :: user_info"></div>
+
+        <!-- Tabla para mostrar todas las tareas, se nombra para ordernar el CSS,
+         que las columnas se ven por defecto todas pegadas-->
+        <table class = "AllTaskReportTable">
+
+            <!-- Encabezado tabla -->
+            <thead>
+            <tr>
+                <th>Tarea</th>
+                <th>Estado</th>
+                <th>Fecha límite</th>
+            </tr>
+            </thead>
+
+            <!-- Cuerpo tabla -->
+            <tbody>
+
+            <!-- Itera todas las tareas del usuario -->
+            <tr th:each="task : ${user.tasks}">
+
+                <!-- Descripción tarea -->
+                <td th:text="${task.description}">
+                    Comprar leche
+                </td>
+
+                <!-- Estado tarea -->
+                <td th:text="${task.status}">
+                    PENDING
+                </td>
+
+                <!-- Fecha límite -->
+                <td>
+
+                    <!-- Si existe fecha -->
+                    <span th:if="${task.deadline != null}"
+                          th:text="${#temporals.format(task.deadline, 'dd/MMMM/yyyy')}">
+                        16/mayo/2026
+                    </span>
+
+                    <!-- Si no existe fecha -->
+                    <span th:if="${task.deadline == null}">
+                        No especificada
+                    </span>
+                </td>
+
+            </tr>
+            </tbody>
+        </table>
+
+    </main>
+
+</div>
+
+</body>
+</html>

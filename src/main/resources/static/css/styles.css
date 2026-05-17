@@ -143,3 +143,16 @@
  }
 
 .validationError {font-size: 0.9rem; color: red; margin-top: 4px;}
+
+/* LABORATORIO 3 : Para ordernar mejor visualización en reporte de tareas */
+/* Alineación centrada básica de web 1 */
+.AllTaskReportTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.AllTaskReportTable th,
+.AllTaskReportTable td {
+    padding: 10px;
+    text-align: center;
+}
